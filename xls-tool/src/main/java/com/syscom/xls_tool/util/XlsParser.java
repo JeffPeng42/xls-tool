@@ -28,6 +28,7 @@ public class XlsParser {
 	private int data_end_idx = -99;
 	
 	
+	
 	public XlsParser(Builder builder) {
 		this.voName = builder.VoName;
 		this.lstFixedField = builder.lstFixedField;
@@ -35,7 +36,9 @@ public class XlsParser {
 		this.rowIdxFieldName = builder.rowIdxFieldName;
 		this.clazz = builder.clazz;
 		this.data_strt_idx = builder.data_strt_idx;
+		
 		this.data_end_idx = builder.data_end_idx;
+		
 		this.lstCheckNullField = builder.lstCheckNullField;
 	}
 	
