@@ -27,6 +27,7 @@ public class XlsParser {
 	private int data_strt_idx = -99;
 	private int data_end_idx = -99;
 	
+	
 	public XlsParser(Builder builder) {
 		this.voName = builder.VoName;
 		this.lstFixedField = builder.lstFixedField;
