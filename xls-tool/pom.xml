@@ -1,0 +1,179 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.syscom.tool</groupId>
+	<artifactId>xls-tool</artifactId>
+	<version>0.0.3</version>
+
+	<properties>
+		<java.version>1.8</java.version>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
+		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+		<maven-build-helper-plugin.version>1.12</maven-build-helper-plugin.version>
+
+		<jmh.version>1.19</jmh.version>
+		<junit.version>4.12</junit.version>
+	</properties>
+
+	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<name>nexus</name>
+			<url>http://192.168.1.18:8081/nexus/content/repositories/syscom</url>
+		</repository>
+
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://192.168.1.18:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>syscom</id>
+			<url>http://192.168.1.18:8081/nexus/content/repositories/syscom</url>
+		</repository>
+
+		<repository>
+			<id>snapshots</id>
+			<url>http://192.168.1.18:8081/nexus/content/repositories/snapshots</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>com.syscom</groupId> -->
+		<!-- <artifactId>reflect-tool</artifactId> -->
+		<!-- <version>0.0.1-SNAPSHOT</version> -->
+		<!-- </dependency> -->
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>25.1-jre</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<!-- build時 會把./XXX/XXX 目錄下的資料放到 resource 目錄下 -->
+		<!-- <resources> -->
+		<!-- <resource> -->
+		<!-- <directory>./XXX/XXX</directory> -->
+		<!-- </resource> -->
+		<!-- </resources> -->
+
+		<plugins>
+			<!-- run java main class before build -->
+			<!-- <plugin> -->
+			<!-- <groupId>org.codehaus.mojo</groupId> -->
+			<!-- <artifactId>exec-maven-plugin</artifactId> -->
+			<!-- <version>1.2.1</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <phase>post-clean</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>java</goal> -->
+			<!-- </goals> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- <configuration> -->
+			<!-- <mainClass>com.syscom.i18n.GenI18nProperties</mainClass> -->
+			<!-- <arguments> -->
+			<!-- <argument>./doc/i18n.xls</argument> -->
+			<!-- <argument>./i18n/data</argument> -->
+			<!-- <argument>./i18n/data</argument> -->
+			<!-- </arguments> -->
+			<!-- </configuration> -->
+			<!-- </plugin> -->
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<finalName>xls-tool</finalName>
+					<descriptors>
+						<descriptor>src/main/resources/package.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 自動部屬到nexus上 -->
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.5.1</version>
+				<executions>
+					<execution>
+						<id>nexus-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<serverId>nexus</serverId>
+					<nexusUrl>http://192.168.1.18:8081/nexus/content/repositories/syscom</nexusUrl>
+					<skipStaging>true</skipStaging>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- 需要執行release 和 tag 再加這一段 -->
+	<!-- <scm> -->
+	<!-- <url>https://192.168.1.18:8443/svn/STM/SD/STM-MGX-PHASE2</url> -->
+	<!-- <connection>scm:svn:https://192.168.1.18:8443/svn/STM/SD/STM-MGX-PHASE2</connection> -->
+	<!-- <developerConnection>scm:svn:https://192.168.1.18:8443/svn/STM/SD/STM-MGX-PHASE2</developerConnection> -->
+	<!-- </scm> -->
+
+
+</project>
