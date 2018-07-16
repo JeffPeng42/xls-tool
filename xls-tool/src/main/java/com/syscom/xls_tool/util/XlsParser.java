@@ -28,7 +28,6 @@ public class XlsParser {
 	private int data_end_idx = -99;
 	
 	
-	
 	public XlsParser(Builder builder) {
 		this.voName = builder.VoName;
 		this.lstFixedField = builder.lstFixedField;
@@ -52,7 +51,7 @@ public class XlsParser {
 		int row_end_idx = (data_end_idx == -99 || data_end_idx == 0) ? sheet.getLastRowNum() : data_end_idx;
 		for ( int rowIndex = row_strt_idx ; rowIndex <= row_end_idx; rowIndex++) {
 			// 建出vo
-			Object newVo =  Class.forName(clazz.getName()).newInstance();
+			Object newVo = Class.forName(clazz.getName()).newInstance();
 			
 			// ========== 設定RowIndex欄位 ==========
 			setRowIndexField(rowIndex, newVo);
@@ -151,15 +150,11 @@ public class XlsParser {
 		}
 	}
 	
-	
-	
 	private void setFixedFieldVal2Vo(Object newVo) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		for (Xls_fixed_field xls_fixed_field : lstFixedField) {
 			String fieldName = xls_fixed_field.getFieldName();
 			String value = xls_fixed_field.getValue();
 			setFieldVal(newVo, fieldName, value);
-//			Method setMethod = getSetMethod(fieldName);
-//			setMethod.invoke(newVo, value);
 		}
 	}
 	
@@ -303,7 +298,6 @@ public class XlsParser {
 		
 		public Builder buildVo(Class clazz) {
 			Preconditions.checkArgument((clazz != null), "Vo 不可為null");
-			
 			this.clazz = clazz;
 			String simpleName = clazz.getSimpleName();
 			this.VoName = simpleName;
@@ -328,7 +322,6 @@ public class XlsParser {
 			Preconditions.checkArgument((data_strt_idx != -99 && data_strt_idx >=0 ), "請呼叫buildDataRange, 設定資料範圍");
 			return new XlsParser(this);
 		}
-
 
 	}
 
